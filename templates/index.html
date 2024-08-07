@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorldBrief</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body, html{
+            height: 100%;
+            width: 100%;
+        }
+        .navbar {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            height: 5rem;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            background-color: rgb(14 116 144);
+            gap: 35vw ;
+        }
+        .img-div{
+            width:5.2vw;
+            height: 5.2vw;
+            background-color: red;
+            border-bottom-left-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .img-div img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        } 
+        .navbar h1{
+            font-size: 1.5vw;
+            color: #fff;
+        }
+
+        @media (min-width: 768px) {
+            .navbar img {
+                align-self: flex-start;
+                width: 7.5rem;
+            }
+        }
+
+        .section {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 5rem;
+            width: 100%;
+        }
+
+        .section > div {
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .section > div {
+                width: 50%;
+            }
+        }
+
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        textarea {
+            width: 91.666667%;
+            height: 75%;
+            margin: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid black;
+            border-radius: 0.5rem;
+            align-self: center;
+            display: flex;
+            justify-content: center;
+        }
+
+        form{
+            margin-top: 0.7vw;
+        }
+        .form-controls {
+            display: flex;
+            justify-content: space-between;
+            width: 91.666667%;
+            margin: 0.5rem;
+            align-self: center;
+        }
+
+        .form-controls div {
+            color: gray;
+        }
+
+        .form-controls input[type="range"] {
+            margin: 0.5rem;
+
+        }
+
+        .buttons {
+            display: flex;
+            align-self: center;
+        }
+
+        .buttons button {
+            margin: 0.25rem;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            outline: none !important;
+        }
+
+        .buttons .submit-btn {
+            background-color: #38a169;
+            outline: none;
+        }
+
+        .buttons .submit-btn:hover {
+            background-color: #2b6cb0;
+        }
+
+        .buttons .reset-btn {
+            background-color: #e53e3e;
+        }
+
+        .buttons .reset-btn:hover {
+            background-color: #2b6cb0;
+        }
+
+        .output-section {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .output-section textarea {
+            background-color: #EDFFD2;
+            width: 91.666667%;
+            border: 1px solid #38a169;
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            align-self: center;
+            display: flex;
+            justify-content: center;
+            height: 75%;
+        }
+
+        .output-controls {
+            display: flex;
+            justify-content: space-between;
+            width: 91.666667%;
+            margin: 0.5rem;
+            align-self: center;
+        }
+
+        .output-controls div {
+            color: gray;
+        }
+
+        .output-buttons {
+            display: flex;
+            align-self: center;
+        }
+
+        .output-buttons button {
+            margin: 0.5rem;
+            color: white;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .output-buttons .copy-btn {
+            background-color: #4299e1;
+        }
+
+        .output-buttons .copy-btn:hover {
+            background-color: #2b6cb0;
+        }
+
+        .output-buttons .clear-btn {
+            background-color: #e53e3e;
+        }
+
+        .output-buttons .clear-btn:hover {
+            background-color: #2b6cb0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <a href="/">
+        <div class="img-div">
+            <img src="https://thumbs.dreamstime.com/b/artificial-intelligence-ai-text-center-moving-blue-waves-machine-learning-data-analytics-vector-199244493.jpg" alt="Logo">
+        </div>
+    </a>
+        <h1>WorldBrief</h1>
+
+    </div>
+
+    <section class="section">
+        <div class="sec-div">
+            <form action="{{url_for('Summarize')}}" method="post">
+                <textarea name="input" id="input1" cols="30" rows="10" placeholder="Enter your Data" required="required" oninput="updateInputInfo()">{{input_text}}</textarea>
+                <div class="form-controls">
+                    <div id="input-characters">Characters: 0</div>
+                    <div id="input-words">Words: 0</div>
+                    <div>     
+                        <h3> Max Summary Length</h3>
+                        <input type="range" name="max-len" id="summary-length" min="20" max="1000" value="20" oninput="updateSliderValue()">
+                        <span id="slider-value">20</span>
+                    </div>
+                </div>
+                <div class="form-controls">
+                    <div>
+                        <label for="input-lang">Input Language:</label>
+                        <select name="input-lang" id="input-lang">
+                            <option value="en">English</option>
+                            <option value="es">Spanish</option>
+                            <option value="fr">French</option>
+                            <option value="hi">Hindi</option>
+                            <!-- Add more languages as needed -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="output-lang">Output Language:</label>
+                        <select name="output-lang" id="output-lang">
+                            <option value="en">English</option>
+                            <option value="es">Spanish</option>
+                            <option value="fr">French</option>
+                            <option value="hi">Hindi</option>
+                            <!-- Add more languages as needed -->
+                        </select>
+                    </div>
+                </div>
+                <div class="buttons">
+                    <button class="submit-btn" type="submit" onclick="Check()">Submit</button>
+                    <button class="reset-btn" type="reset" onclick="clearInput()">Clear Input</button>
+                </div>
+            </form>
+            
+        </div>
+
+        <div class="sec-div">
+            <div class="output-section">
+                <textarea  rows="10" cols="30" name="output" id="output1" readonly placeholder="Your Summary" oninput="updateOutputInfo()">{{result}}</textarea>
+                <div class="output-controls">
+                    <div id="output-characters">Characters: 0</div>
+                    <div id="output-words">Words: 0</div>
+                </div>
+                <div class="output-buttons">
+                    <button class="copy-btn" onclick="CopyText()">Copy text</button>
+                    <button class="clear-btn" onclick="clearOutput()">Clear Output</button>
+               </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function CopyText() {
+            var copyText = document.getElementById("output1");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+        }
+
+        function Check() {
+            var reg = /<(.|\n)*>/g;
+            if (reg.test(document.getElementById("input1").value) == true) {
+                var ErrorText = 'Make Sure You Provide Valid Data.';
+                alert('Error Text');
+            }
+        }
+
+        function clearOutput() {
+            document.getElementById("output1").value = "";
+            updateOutputInfo();
+        }
+
+        function clearInput() {
+            document.getElementById("input1").value = "";
+            updateInputInfo();
+        }
+
+        function updateInputInfo() {
+            const inputText = document.getElementById("input1").value;
+            const inputCharacters = inputText.length;
+            const inputWords = countWords(inputText);
+            document.getElementById("input-characters").innerText = `Characters: ${inputCharacters}`;
+            document.getElementById("input-words").innerText = `Words: ${inputWords}`;
+        }
+
+        function updateOutputInfo() {
+            const outputText = document.getElementById("output1").value;
+            const outputCharacters = outputText.length;
+            const outputWords = countWords(outputText);
+            document.getElementById("output-characters").innerText = `Characters: ${outputCharacters}`;
+            document.getElementById("output-words").innerText = `Words: ${outputWords}`;
+        }
+
+        function countWords(text) {
+            // Trim leading and trailing white spaces
+            text = text.trim();
+            // Split words by spaces and count them
+            const words = text.split(/\s+/);
+            return words.length;
+        }
+
+
+        function updateSliderValue() {
+            const sliderValue = document.getElementById("summary-length").value;
+            document.getElementById("slider-value").innerText = sliderValue;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            updateInputInfo();
+            updateOutputInfo();
+        });
+    </script>
+    
+</body>
+</html>
